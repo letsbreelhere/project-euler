@@ -39,4 +39,4 @@ lexPerm n xs =
    in lexPerm (n `mod` maxFact) xs'
 
 main :: IO ()
-main = pure ()
+main = putStrLn . concatMap show $ lexPerm 999999 [0..9]
