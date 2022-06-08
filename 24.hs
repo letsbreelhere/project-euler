@@ -24,6 +24,9 @@ swapIndices i j xs =
       y = xs !! j
    in (setIndex i y . setIndex j x) xs
 
+sortLast :: (Ord a) => Int -> [a] -> [a]
+sortLast k xs = take (length xs - k) xs ++ sort (drop (length xs - k) xs)
+
 lexPerm :: Int -> [Int] -> [Int]
 lexPerm 0 xs = xs
 lexPerm n xs =
@@ -32,7 +35,7 @@ lexPerm n xs =
       len = length xs
       ixToChange = len - maxDigit - 1
       replacementIx = ixToChange + n `div` maxFact
-      xs' = swapIndices replacementIx ixToChange xs
+      xs' = sortLast maxDigit $ swapIndices replacementIx ixToChange xs
    in lexPerm (n `mod` maxFact) xs'
 
 main :: IO ()
