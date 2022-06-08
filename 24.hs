@@ -1,7 +1,7 @@
 module Main where
 
 import Data.List ((\\), find, sort)
-import Debug.Trace
+import Control.Applicative
 
 perms :: Eq a => [a] -> [[a]]
 perms [] = [[]]
@@ -27,11 +27,16 @@ swapIndices i j xs =
 sortLast :: (Ord a) => Int -> [a] -> [a]
 sortLast k xs = take (length xs - k) xs ++ sort (drop (length xs - k) xs)
 
+findLast :: (a -> Bool) -> [a] -> Maybe a
+findLast _ [] = Nothing
+findLast p (x:xs)
+  | p x = findLast p xs <|> Just x
+  | otherwise = Nothing
+
 lexPerm :: Int -> [Int] -> [Int]
 lexPerm 0 xs = xs
 lexPerm n xs =
-  let lesserFactorials = takeWhile (\(i, fi) -> fi <= n) facts
-      (maxDigit, maxFact) = last lesserFactorials
+  let Just (maxDigit, maxFact) = findLast (\(i, fi) -> fi <= n) facts
       len = length xs
       ixToChange = len - maxDigit - 1
       replacementIx = ixToChange + n `div` maxFact
