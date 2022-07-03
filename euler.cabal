@@ -1,8 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
+--
+-- hash: c37b1895f7ca8d01d01ed16055f079a5be0a846d7e249e4421bb338cd7734587
 
 name:           euler
 version:        0.1.0.0
