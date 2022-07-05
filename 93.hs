@@ -32,12 +32,14 @@ nodes (B _ l r) = nodes l ++ nodes r
 
 genTrees :: Eq a => Int -> [a -> a -> Maybe a] -> [a] -> [OTree a]
 genTrees 0 _ _ = []
+genTrees 1 _ xs = N <$> xs
 genTrees _ _ [] = []
 genTrees n os xs = do
   o <- os
-  l <- (N <$> xs) ++ genTrees (n-1) os xs
+  n' <- [1..n-1]
+  l <- genTrees n' os xs
   let xs' = xs \\ nodes l
-  r <- (N <$> xs') ++ genTrees (n-1) os xs'
+  r <- genTrees (n-n') os xs'
   pure $ B o l r
 
 inserts :: a -> [a] -> [[a]]
@@ -51,7 +53,7 @@ perms (x:xs) = do
   inserts x p
 
 results :: [Rational] -> [Integer]
-results =  map numerator . L.sort . L.nub . filter (\n -> n > 0 && denominator n == 1) . mapMaybe reduce . filter (\t -> length (nodes t) == 4) . genTrees 3 ops
+results =  map numerator . L.sort . L.nub . filter (\n -> n > 0 && denominator n == 1) . mapMaybe reduce . genTrees 4 ops
 
 chooseIncr :: Ord a => Int -> [a] -> [[a]]
 chooseIncr 0 _ = [[]]
